@@ -18,5 +18,14 @@
       if elem % 2 == 0:
         lst.remove(elem)
     >>> lst = [1,1,3,3]
-    
+    ```
+  * How to give a identifier for every object that we create?
+    * It is suppose to be an **Instance attribute** since it is differ from the object.But how can we know how many object that we have already created?
+    * We can use **Class attribute** to achieve the goal
+      ```python
+      class example:
+       counter = 0
+       def __init__(self):
+        example.counter += 1
+      ```
      
