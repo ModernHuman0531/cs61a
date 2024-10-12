@@ -5,7 +5,7 @@ test = {
     {
       'cases': [
         {
-          'answer': 'The ThrowerAnt finds the nearest place in front of its own place that has Bees and throws at a random Bee in that place',
+          'answer': '8921294332adbef5e6db219b03adedf9',
           'choices': [
             r"""
             The ThrowerAnt finds the nearest place in front of its own place
@@ -22,11 +22,11 @@ test = {
             'The ThrowerAnt throws at a random Bee in its own Place'
           ],
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'question': 'What Bee should a ThrowerAnt throw at?'
         },
         {
-          'answer': "The place's entrance instance attribute",
+          'answer': '9bd9c23a391f841e8d9e4147c56659a7',
           'choices': [
             "The place's entrance instance attribute",
             "The place's exit instance attribute",
@@ -34,40 +34,40 @@ test = {
             'Decrement the place by 1'
           ],
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'question': 'How do you get the Place object in front of another Place object?'
         },
         {
-          'answer': 'The Hive',
+          'answer': '2ca313dd416803bfaecbcf4a2d1851c1',
           'choices': [
             'The Hive',
             'None',
             'An empty Place'
           ],
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'question': 'What is the entrance of the first Place in a tunnel (i.e. where do the bees enter from)?'
         },
         {
-          'answer': 'by calling the is_hive method on the place instance',
+          'answer': '1882785a9fe9c470b73929020d057fda',
           'choices': [
             'by calling the is_hive method on the place instance',
             'by checking the bees attribute of the place instance',
             'by checking the ant attribute of the place instance'
           ],
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'question': 'How can you determine is a given Place is the Hive?'
         },
         {
-          'answer': 'None',
+          'answer': '044ef3c0c6fd739b6260fe6f6cae71dd',
           'choices': [
             'None',
             'A random Bee in the Hive',
             'The closest Bee behind the ThrowerAnt'
           ],
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'question': 'What should nearest_bee return if there is no Bee in front of the ThrowerAnt in the tunnel?'
         }
       ],
@@ -87,21 +87,27 @@ test = {
           >>> far_place.add_insect(far_bee)
           >>> nearest_bee = thrower.nearest_bee(gamestate.beehive)
           >>> thrower.nearest_bee(gamestate.beehive) is far_bee
-          False
+          03456a09f22295a39ca84d133a26f63d
+          # locked
           >>> thrower.nearest_bee(gamestate.beehive) is near_bee
-          True
+          c7a88a0ffd3aef026b98eef6e7557da3
+          # locked
           >>> nearest_bee.health
-          2
+          20d533d3e06345c8bd7072212867f2d1
+          # locked
           >>> thrower.action(gamestate)    # Attack! ThrowerAnts do 1 damage
           >>> near_bee.health
-          1
+          d89cf7c79d5a479b0f636734143ed5e6
+          # locked
           >>> far_bee.health
-          3
+          81a7d27d1a4a958871bb97b545b871db
+          # locked
           >>> thrower.place is ant_place    # Don't change self.place!
-          True
+          c7a88a0ffd3aef026b98eef6e7557da3
+          # locked
           """,
           'hidden': False,
-          'locked': False
+          'locked': True
         },
         {
           'code': r"""
