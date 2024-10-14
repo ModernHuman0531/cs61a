@@ -306,6 +306,10 @@ class FireAnt(Ant):
         If the fire_ants is dead, loop over the bee's list and cause fire ant's damage before the fire ant's is removed
         """
         bee_list = self.place.bees[:]
+        """Should create a exception for fire ant, since
+            1.The reflected damage of a fire ant should not be doubled
+            2.Only the extra damage it deals when  its health is 0
+        """
         if amount >= self.health:#The case when fireant die do 'additional' damage
             for bee in bee_list:
                 Insect.reduce_health(bee, self.damage + amount)
@@ -506,16 +510,21 @@ class QueenAnt(ScubaThrower):  # You should change this line
             temp_place = self.place.exit
             while temp_place != None:
                 if temp_place.ant != None:
-                    if temp_place.ant.is_doubled == False:
+                    if temp_place.ant.is_doubled == False and temp_place.ant.name is not 'Fire' :
                         temp_place.ant.damage *= 2
+                        temp_place.ant.is_doubled = True                        
                         #return TankAnt is TankAnt
-                        if temp_place.ant.name is 'Tank':
-                            return temp_place.ant.name
+                        if temp_place.ant.name is 'Bodyguard' or temp_place.ant.name is 'Tank':
                             if temp_place.ant.contained_ant != None:
-                                temp_place.ant.contained.ant.damage *= 2
-                                temp_place.ant.contained.ant.is_doubled = True
-
-                        temp_place.ant.is_doubled = True
+                                temp_place.ant.contained_ant.damage *= 2
+                                temp_place.ant.contained_ant.is_doubled = True
+                    """
+                    elif temp_place.ant.name is 'Fire' and temp_place.ant.is_doubled == False:
+                        if temp_place.ant.health == 0:
+                            temp_place.ant.damage *= 2
+                            temp_place.ant.is_doubled = True  
+                    """
+                            
                 temp_place = temp_place.exit
         else:
             self.reduce_health(self.health)
