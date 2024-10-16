@@ -31,15 +31,15 @@
 * Instead of data anstraction, we can use the class to construct it.
   * Code:
     ```python
-  class Tree:
-    def __init__(self, label, branches = []):
-      #Check branch must be tree or empty
-      for branch in branches:
-        assert isinstance(branch, Tree)
-      self.label = label
-      self.branches = branches
-    def __repr__(self):
-      return 'Tree({0},({1})'.format(t.label,t.branches)
+    class Tree:
+      def __init__(self, label, branches = []):
+        #Check branch must be tree or empty
+        for branch in branches:
+          assert isinstance(branch, Tree)
+        self.label = label
+        self.branches = branches
+      def __repr__(self):
+        return 'Tree({0},({1})'.format(t.label,t.branches)
     ```
 
   
