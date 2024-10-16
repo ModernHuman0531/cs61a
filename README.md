@@ -1,1 +1,5 @@
 # cs61a
+* CS61A Emphasizes abstraction and equips students to use programs to solve real-world problems without focusing on the underlying hardware details.
+* Going back to CS61A, you will note that this is not just a programming language class, but goes deeper into the principles of program construction and operation. Finally you will implement an interpreter for Scheme in Python in Project 4. In addition, abstraction will be a major theme in this class, as you will learn about functional programming, data abstraction, object orientation, etc. to make your code more readable and modular. Of course, learning a programming language is also a big part of this course. You will master three programming languages, Python, Scheme, and SQL, and in learning and comparing them, you will be equiped with the ability to quickly master a new programming language.
+* Class_link:[CS61A Fall 2020](https://web.archive.org/web/20210104105406/https://cs61a.org/)
+* Solution_link:[Solution](https://github.com/half-dreamer/CS61A-20fa/tree/main)
