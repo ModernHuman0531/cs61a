@@ -11,7 +11,7 @@
       self.rest = rest
     def __repr__(self):#In our self-defined class, we should def our own function to let python interpreter know how to represent it.
       return 'Link({0},{1})'.format(self.first, self.rest)
-    ```
+  ```
 * Insert the small link-list in the random position in the original link-list
   * Idea: break the link of the position you want to insert, the former's rest part connect to the self-created's first, and the self-created's rest connect to the latter's first
   * Code:
@@ -26,7 +26,7 @@
         v.rest = self_link
       elif v.first > n:
         s.first, s.rest = v, Link(s.first,s.rest)#Change the Link_list's first into v, then the rest will be the number we replaced and the original rest.
-      ```
+    ```
 ## Tree in class
 * Instead of data anstraction, we can use the class to construct it.
   * Code:
@@ -40,7 +40,7 @@
       self.branches = branches
     def __repr__(self):
       return 'Tree({0},({1})'.format(t.label,t.branches)
-      ```
+    ```
 
   
 
