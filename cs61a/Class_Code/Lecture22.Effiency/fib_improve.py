@@ -5,7 +5,7 @@ def fib(n):# This is lack of effiency because of we have to count the same resul
         return fib(n-1) + fib(n-2)
 
 #In order to prevent us from counting the same stuff repeatedly, we can build a function that help us memory the result that we have already count
-def memo(f):
+def memo(f):# memo takes the function that help us to remember the result we have already calculated in that function
     cache = {}#Dictionary can imagine as map in c++
     def memorized(n):
         if n not in cache:
