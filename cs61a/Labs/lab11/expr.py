@@ -107,6 +107,14 @@ class Name(Expr):
         None
         """
         "*** YOUR CODE HERE ***"
+        """
+        Idea :Since the frame to store variable is dictionary, we can use key 
+        to find whether the value exist or not. 
+        """
+        if self.var_name in env.keys():
+            return env[self.var_name]
+        else:
+            return None
 
     def __str__(self):
         return self.var_name
@@ -173,6 +181,12 @@ class CallExpr(Expr):
         Number(14)
         """
         "*** YOUR CODE HERE ***"
+        """
+        evaluate operator turn Name('add') to PrimitiveFunction(<built-in function add>)
+        evaluate operands turn  [Literal(3), Name('a')]) to [Number(3), Number(1)]
+        """
+        return self.operator.eval(env).apply([operand.eval(env) for operand in self.operands])  
+
 
     def __str__(self):
         function = str(self.operator)
@@ -282,6 +296,19 @@ class LambdaFunction(Value):
             raise TypeError("Oof! Cannot apply number {} to arguments {}".format(
                 comma_separated(self.parameters), comma_separated(arguments)))
         "*** YOUR CODE HERE ***"
+        # Make a copy of the parent frame
+        former_env = self.parent.copy()
+        # Update the parent frame dict by the passed in parameter.
+        #Use zip function to pair the parameters with arguments
+        zipped = list(zip(self.parameters, arguments))
+        # If exist in dict parameter exist in dict, then update it's value or add the parameter with value
+        for i in range(len(self.parameters)):
+            former_env[zipped[i][0]] = zipped[i][1]
+        # Evaluate the body with the newly created environment.
+        return self.body.eval(former_env)
+        
+
+
 
     def __str__(self):
         definition = LambdaExpr(self.parameters, self.body)
