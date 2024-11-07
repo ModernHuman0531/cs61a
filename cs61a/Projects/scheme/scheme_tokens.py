@@ -8,8 +8,10 @@ of tokens.  A token may be:
   * A delimiter, including parentheses, dots, and single quotes
 
 This file also includes some features of Scheme that have not been addressed
-in the course, such as quasiquoting and Scheme strings.
+in the course, such as Scheme strings.
 """
+
+from __future__ import print_function  # Python 2 compatibility
 
 from ucb import main
 import itertools
@@ -106,25 +108,30 @@ def tokenize_line(line):
         elif text[0] in _STRING_DELIMS:
             result.append(text)
         else:
-            print("warning: invalid token: {0}".format(text), file=sys.stderr)
-            print("    ", line, file=sys.stderr)
-            print(" " * (i+3), "^", file=sys.stderr)
+            error_message = [
+                "warning: invalid token: {0}".format(text),
+                " " * 4       + line,
+                " " * (i + 4) + "^"
+            ]
+            raise ValueError("\n".join(error_message))
         text, i = next_candidate_token(line, i)
     return result
 
-def tokenize_lines(input):
+def tokenize_lines(inp):
     """An iterator over lists of tokens, one for each line of the iterable
-    input sequence."""
-    return map(tokenize_line, input)
+    input sequence inp."""
+    return (tokenize_line(line) for line in inp)
 
-def count_tokens(input):
-    """Count the number of non-delimiter tokens in input."""
-    return len(list(filter(lambda x: x not in DELIMITERS,
-                           itertools.chain(*tokenize_lines(input)))))
+def count_tokens(inp):
+    """Count the number of non-delimiter tokens in inp."""
+    return len(list(itertools.chain(*tokenize_lines(inp))))
 
 @main
 def run(*args):
-    file = sys.stdin
-    if args:
-        file = open(args[0], 'r')
-    print('counted', count_tokens(file), 'non-delimiter tokens')
+    import argparse
+    parser = argparse.ArgumentParser(description='Count Scheme tokens.')
+    parser.add_argument('file', nargs='?',
+                        type=argparse.FileType('r'), default=sys.stdin,
+                        help='input file to be counted')
+    args = parser.parse_args()
+    print('counted', count_tokens(args.file), 'tokens')

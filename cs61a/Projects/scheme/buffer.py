@@ -1,8 +1,19 @@
 """The buffer module assists in iterating through lines and tokens."""
 
-import math
+from __future__ import print_function  # Python 2 compatibility
 
-class Buffer:
+import math
+import sys
+
+if sys.version_info[0] < 3:  # Python 2 compatibility
+    def input(prompt):
+        sys.stderr.write(prompt)
+        sys.stderr.flush()
+        line = sys.stdin.readline()
+        if not line: raise EOFError()
+        return line.rstrip('\r\n')
+
+class Buffer(object):
     """A Buffer provides a way of accessing a sequence of tokens across lines.
 
     Its constructor takes an iterator, called "the source", that returns the
@@ -10,7 +21,7 @@ class Buffer:
     the end of data.
 
     The Buffer in effect concatenates the sequences returned from its source
-    and then supplies the items from them one at a time through its pop()
+    and then supplies the items from them one at a time through its pop_first()
     method, calling the source for more sequences of items only when needed.
 
     In addition, Buffer provides a current method to look at the
@@ -20,32 +31,32 @@ class Buffer:
     current line, and marks the current token with >>.
 
     >>> buf = Buffer(iter([['(', '+'], [15], [12, ')']]))
-    >>> buf.pop()
+    >>> buf.pop_first()
     '('
-    >>> buf.pop()
+    >>> buf.pop_first()
     '+'
     >>> buf.current()
     15
     >>> print(buf)
     1: ( +
     2:  >> 15
-    >>> buf.pop()
+    >>> buf.pop_first()
     15
     >>> buf.current()
     12
-    >>> buf.pop()
+    >>> buf.pop_first()
     12
     >>> print(buf)
     1: ( +
     2: 15
     3: 12 >> )
-    >>> buf.pop()
+    >>> buf.pop_first()
     ')'
     >>> print(buf)
     1: ( +
     2: 15
     3: 12 ) >>
-    >>> buf.pop()  # returns None
+    >>> buf.pop_first()  # returns None
     """
     def __init__(self, source):
         self.index = 0
@@ -54,16 +65,12 @@ class Buffer:
         self.current_line = ()
         self.current()
 
-    def pop(self):
+    def pop_first(self):
         """Remove the next item from self and return it. If self has
         exhausted its source, returns None."""
         current = self.current()
         self.index += 1
         return current
-
-    @property
-    def more_on_line(self):
-        return self.index < len(self.current_line)
 
     def current(self):
         """Return the current element, or None if none exists."""
@@ -76,6 +83,10 @@ class Buffer:
                 self.current_line = ()
                 return None
         return self.current_line[self.index]
+
+    @property
+    def more_on_line(self):
+        return self.index < len(self.current_line)
 
     def __str__(self):
         """Return recently read contents; current element marked with >>."""
@@ -99,7 +110,7 @@ try:
 except:
     pass
 
-class InputReader:
+class InputReader(object):
     """An InputReader is an iterable that prompts the user for input."""
     def __init__(self, prompt):
         self.prompt = prompt
@@ -109,7 +120,7 @@ class InputReader:
             yield input(self.prompt)
             self.prompt = ' ' * len(self.prompt)
 
-class LineReader:
+class LineReader(object):
     """A LineReader is an iterable that prints lines after a prompt."""
     def __init__(self, lines, prompt, comment=";"):
         self.lines = lines

@@ -1,58 +1,70 @@
-; Some utility functions that you may find useful.
-(define (apply-to-all proc items)
-  (if (null? items)
-      '()
-      (cons (proc (car items))
-            (apply-to-all proc (cdr items)))))
-
-(define (keep-if predicate sequence)
-  (cond ((null? sequence) nil)
-        ((predicate (car sequence))
-         (cons (car sequence)
-               (keep-if predicate (cdr sequence))))
-        (else (keep-if predicate (cdr sequence)))))
-
-(define (accumulate op initial sequence)
-  (if (null? sequence)
-      initial
-      (op (car sequence)
-          (accumulate op initial (cdr sequence)))))
-
 (define (caar x) (car (car x)))
 (define (cadr x) (car (cdr x)))
+(define (cdar x) (cdr (car x)))
 (define (cddr x) (cdr (cdr x)))
-(define (cadar x) (car (cdr (car x))))
 
-; Problem 18
-;; Turns a list of pairs into a pair of lists
+; Some utility functions that you may find useful to implement
+
 (define (zip pairs)
-  'YOUR-CODE-HERE
+  'replace-this-line)
+
+
+;; Problem 15
+;; Returns a list of two-element lists
+(define (enumerate s)
+  ; BEGIN PROBLEM 15
+  (begin
+    (define (helper start_num s)
+      (if (null? s )
+        '()
+        (append (cons (cons start_num (cons (car s) nil)) nil) (helper (+ start_num 1) (cdr s)))    
+      )
+    ) 
+    (helper 0 s)
   )
+)
+  ; END PROBLEM 15
 
-(zip '())
-; expect (() ())
-(zip '((1 2)))
-; expect ((1) (2))
-(zip '((1 2) (3 4) (5 6)))
-; expect ((1 3 5) (2 4 6))
+;; Problem 16
 
-; Problem 19
-
-;; A list of all ways to partition TOTAL, where  each partition must
-;; be at most MAX-VALUE and there are at most MAX-PIECES partitions.
-(define (list-partitions total max-pieces max-value)
-  'YOUR-CODE-HERE
+;; Merge two lists LIST1 and LIST2 according to COMP and return
+;; the merged lists.
+(define (merge comp list1 list2)
+  ; BEGIN PROBLEM 16
+  (cond 
+    ((null? list1) list2)
+    ((null? list2) list1)
+    (else 
+      (if (comp (car list1) (car list2))
+        (append (cons (car list1) nil) (merge comp (cdr list1) list2))
+        (append (cons (car list2) nil) (merge comp list1 (cdr list2)))
+      )
+    ) 
   )
-
-(list-partitions 5 2 4)
-; expects a permutation of ((4 1) (3 2))
-(list-partitions 7 3 5)
-; expects a permutation of ((5 2) (5 1 1) (4 3) (4 2 1) (3 3 1) (3 2 2))
+)
+  ; END PROBLEM 16
 
 
-; Problem 20
-;; Returns a function that takes in an expression and checks if it is the special
-;; form FORM
+(merge < '(1 5 7 9) '(4 8 10))
+; expect (1 4 5 7 8 9 10)
+(merge > '(9 7 5 1) '(10 8 4 3))
+; expect (10 9 8 7 5 4 3 1)
+
+;; Problem 17
+
+(define (nondecreaselist s)
+    ; BEGIN PROBLEM 17
+  (cond
+    ((null? s) '())
+    ( (= 1 (length s)) (cons s nil))
+    ((> (car s) (car (cdr s))) (cons (cons (car s) nil) (nondecreaselist (cdr s))))
+    (else (cons (cons (car s) (car(nondecreaselist (cdr s)))) (cdr (nondecreaselist (cdr s)))))    
+  )
+)
+    ; END PROBLEM 17
+
+;; Problem EC
+;; Returns a function that checks if an expression is the special form FORM
 (define (check-special form)
   (lambda (expr) (equal? form (car expr))))
 
@@ -62,66 +74,36 @@
 (define let?    (check-special 'let))
 
 ;; Converts all let special forms in EXPR into equivalent forms using lambda
-(define (analyze expr)
+(define (let-to-lambda expr)
   (cond ((atom? expr)
-         'YOUR-CODE-HERE
+         ; BEGIN PROBLEM EC
+         'replace-this-line
+         ; END PROBLEM EC
          )
         ((quoted? expr)
-         'YOUR-CODE-HERE
+         ; BEGIN PROBLEM EC
+         'replace-this-line
+         ; END PROBLEM EC
          )
         ((or (lambda? expr)
              (define? expr))
          (let ((form   (car expr))
                (params (cadr expr))
                (body   (cddr expr)))
-           'YOUR-CODE-HERE
+           ; BEGIN PROBLEM EC
+           'replace-this-line
+           ; END PROBLEM EC
            ))
         ((let? expr)
          (let ((values (cadr expr))
                (body   (cddr expr)))
-           'YOUR-CODE-HERE
+           ; BEGIN PROBLEM EC
+           'replace-this-line
+           ; END PROBLEM EC
            ))
         (else
-         'YOUR-CODE-HERE
+         ; BEGIN PROBLEM EC
+         'replace-this-line
+         ; END PROBLEM EC
          )))
-
-(analyze 1)
-; expect 1
-(analyze 'a)
-; expect a
-(analyze '(+ 1 2))
-; expect (+ 1 2)
-
-;; Quoted expressions remain the same
-(analyze '(quote (let ((a 1) (b 2)) (+ a b))))
-; expect (quote (let ((a 1) (b 2)) (+ a b)))
-
-;; Lambda parameters not affected, but body affected
-(analyze '(lambda (let a b) (+ let a b)))
-; expect (lambda (let a b) (+ let a b))
-(analyze '(lambda (x) a (let ((a x)) a)))
-; expect (lambda (x) a ((lambda (a) a) x))
-
-(analyze '(let ((a 1)
-                (b 2))
-            (+ a b)))
-; expect ((lambda (a b) (+ a b)) 1 2)
-(analyze '(let ((a (let ((a 2)) a))
-                (b 2))
-            (+ a b)))
-; expect ((lambda (a b) (+ a b)) ((lambda (a) a) 2) 2)
-(analyze '(let ((a 1))
-            (let ((b a))
-              b)))
-; expect ((lambda (a) ((lambda (b) b) a)) 1)
-
-
-;; Problem 21 (optional)
-;; Draw the hax image using turtle graphics.
-(define (hax d k)
-  'YOUR-CODE-HERE
-  nil)
-
-
-
 
